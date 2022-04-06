@@ -1,9 +1,16 @@
-function App() {
+import React from "react";
+import Header from "./components/Header/Header";
+import MealsSummary from "./components/MealsSummary/MealsSummary";
+import AvailableMeals from "./components/AvailableMeals/AvailableMeals";
+import Cart from "./components/Cart/Cart";
+
+export default function App() {
   return (
-    <div>
-      <h2>Let's get started!</h2>
-    </div>
+    <>
+      <Header />
+      <MealsSummary />
+      <AvailableMeals />
+      <Cart />
+    </>
   );
 }
-
-export default App;
