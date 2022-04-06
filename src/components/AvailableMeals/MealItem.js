@@ -7,10 +7,10 @@ export default function MealItem(props) {
     <li className={styles.meal}>
       <div>
         <h3>{props.name}</h3>
-        <p className={styles.description}>{props.description}</p>
-        <div className={styles.price}>${props.price}</div>
+        <p className={styles.description}>{props.item.description}</p>
+        <div className={styles.price}>${props.item.price.toFixed(2)}</div>
       </div>
-      <MealItemForm />
+      <MealItemForm item={props.item} />
     </li>
   );
 }

@@ -8,7 +8,7 @@ export default function Header(props) {
     <>
       <nav className={styles.header}>
         <h1>Food App</h1>
-        <HeaderCartButton />
+        <HeaderCartButton itemCount={props.itemCount} />
       </nav>
       <div className={styles["main-image"]}>
         <img src={meals} alt="meals" />

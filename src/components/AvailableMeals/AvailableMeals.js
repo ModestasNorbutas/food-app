@@ -1,22 +1,21 @@
 import React from "react";
 import Card from "../UI/Card";
 import styles from "./AvailableMeals.module.css";
-import mealsData from "../DummyData/dummy-meals";
 import MealItem from "./MealItem";
 
-export default function AvailableMeals() {
+export default function AvailableMeals(props) {
   return (
     <Card className={styles.meals}>
-      <ul>
-        {mealsData.map((meal) => (
-          <MealItem
-            key={meal.id}
-            name={meal.name}
-            description={meal.description}
-            price={meal.price}
-          />
-        ))}
-      </ul>
+      {props.mealsData.length > 0 && (
+        <ul>
+          {props.mealsData.map((meal) => (
+            <MealItem key={meal.id} item={meal} />
+          ))}
+        </ul>
+      )}
+      {props.mealsData.length <= 0 && (
+        <div>Waiting for data from server...</div>
+      )}
     </Card>
   );
 }
