@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import styles from "./MealItemForm.module.css";
-import Input from "./Input";
+import Input from "../UI/Input";
 import { CartContext } from "../../context/cart-context";
 
 export default function MealItemForm(props) {
@@ -18,7 +18,17 @@ export default function MealItemForm(props) {
 
   return (
     <form className={styles.form}>
-      <Input value={amount} onChange={changeAmount} />
+      <Input
+        label="Amount"
+        input={{
+          id: "amount",
+          type: "number",
+          min: "1",
+          max: "999",
+        }}
+        value={amount}
+        onChange={changeAmount}
+      />
       <button className={styles.button} onClick={handleAdd}>
         +Add
       </button>

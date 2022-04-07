@@ -13,7 +13,7 @@ export default function Cart(props) {
   );
   return (
     <Modal>
-      <div className={styles.cartItem}>
+      <div className={styles["cart-items"]}>
         {Object.entries(props.cartContent).map(([key, value]) => {
           return <CartItem key={key} id={key} item={value} />;
         })}
