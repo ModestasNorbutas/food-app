@@ -36,6 +36,13 @@
   color: white;
 }
 
+.actions button:disabled {
+  background-color: gray;
+  border-color: gray;
+  color: white;
+  cursor: default;
+}
+
 .actions .button--alt {
   color: #8a2b06;
 }

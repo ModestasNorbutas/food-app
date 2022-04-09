@@ -4,7 +4,6 @@ import MealsSummary from "./components/MealsSummary/MealsSummary";
 import AvailableMeals from "./components/AvailableMeals/AvailableMeals";
 import Cart from "./components/Cart/Cart";
 import { CartContext } from "./context/cart-context";
-import DUMMY_MEALS from "./components/DummyData/dummy-meals";
 
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
@@ -42,6 +41,9 @@ const cartReducer = (state, action) => {
       };
     }
   }
+  if (action.type === "CLEAR") {
+    return {};
+  }
 };
 
 export default function App() {
@@ -49,9 +51,35 @@ export default function App() {
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [cartContent, editCartContent] = useReducer(cartReducer, {});
   const [itemCount, setItemCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mealsError, setMealsError] = useState(null);
 
   useEffect(() => {
-    setMealsData(DUMMY_MEALS);
+    const fetchMeals = async () => {
+      try {
+        const response = await fetch(
+          "https://food-app-85a0a-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
+        );
+
+        const data = await response.json();
+
+        const loadedMeals = [];
+
+        for (const key in data) {
+          loadedMeals.push({
+            id: key,
+            name: data[key].name,
+            description: data[key].description,
+            price: data[key].price,
+          });
+        }
+        setMealsData(loadedMeals);
+      } catch (error) {
+        setMealsError(error.message);
+      }
+    };
+    fetchMeals();
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -92,27 +120,30 @@ export default function App() {
     });
   }
 
-  function order() {
-    console.log("Ordering...");
+  function clearCart() {
+    editCartContent({ type: "CLEAR" });
   }
 
   return (
     <CartContext.Provider
       value={{
         mealsData: mealsData,
-        showCart: showCart,
-        hideCart: hideCart,
-        addToCart: addToCart,
-        increaseCartItem: increaseCartItem,
-        decreaseCartItem: decreaseCartItem,
-        order: order,
+        showCart,
+        hideCart,
+        addToCart,
+        increaseCartItem,
+        decreaseCartItem,
       }}
     >
       <Header itemCount={itemCount} />
       <MealsSummary />
-      <AvailableMeals mealsData={mealsData} />
+      <AvailableMeals
+        mealsData={mealsData}
+        isLoading={isLoading}
+        mealsError={mealsError}
+      />
       {isCartVisible && (
-        <Cart cartContent={cartContent} isCartVisible={isCartVisible} />
+        <Cart cartContent={cartContent} clearCart={clearCart} />
       )}
     </CartContext.Provider>
   );

@@ -7,5 +7,4 @@ export const CartContext = createContext({
   addToCart: () => {},
   increaseCartItem: () => {},
   decreaseCartItem: () => {},
-  order: () => {},
 });
