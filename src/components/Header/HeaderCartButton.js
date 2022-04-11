@@ -1,10 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./HeaderCartButton.module.css";
 import CartIcon from "./CartIcon";
-import { CartContext } from "../../context/cart-context";
+// import { CartContext } from "../../context/cart-context";
+import { useSelector } from "react-redux";
 
 export default function HeaderCartButton(props) {
-  const context = useContext(CartContext);
+  // const context = useContext(CartContext);
+  const itemCount = useSelector((state) => state.cart.itemCount);
   const [bump, setBump] = useState("");
 
   useEffect(() => {
@@ -17,12 +19,12 @@ export default function HeaderCartButton(props) {
     };
   }, [props.itemCount]);
   return (
-    <button className={styles.button + " " + bump} onClick={context.showCart}>
+    <button className={styles.button + " " + bump} onClick={props.showCart}>
       <div className={styles.icon}>
         <CartIcon />
       </div>
       <div>Your Cart</div>
-      <div className={styles.badge}>{props.itemCount}</div>
+      <div className={styles.badge}>{itemCount}</div>
     </button>
   );
 }

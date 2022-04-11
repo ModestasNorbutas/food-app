@@ -1,23 +1,34 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Cart.module.css";
 import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
-import { CartContext } from "../../context/cart-context";
+// import { CartContext } from "../../context/cart-context";
 import OrderForm from "./OrderForm";
+import { useSelector, useDispatch } from "react-redux";
+import { cartActions } from "../../store/index";
 
 export default function Cart(props) {
   const [isOrdering, setIsOrdering] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [orderNumber, setOrderNumber] = useState(null);
-  const context = useContext(CartContext);
+  // const context = useContext(CartContext);
+  const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const itemCount = useSelector((state) => state.cart.itemCount);
+  const cartIsEmpty = itemCount === 0;
+  const cartContent = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
 
-  const totalPrice = Object.values(props.cartContent).reduce(
-    (sum, value) => sum + value.price * value.amount,
-    0
-  );
+  // const totalPrice = Object.values(context.cartContent).reduce(
+  //   (sum, value) => sum + value.price * value.amount,
+  //   0
+  // );
 
-  const cartIsEmpty = Object.keys(props.cartContent).length === 0;
+  // const cartIsEmpty = Object.keys(context.cartContent).length === 0;
+
+  const handleClearCart = () => {
+    dispatch(cartActions.clearCart());
+  };
 
   const handleOrder = () => {
     setIsOrdering(true);
@@ -34,13 +45,14 @@ export default function Cart(props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userData: userData,
-            orderedItems: props.cartContent,
+            orderedItems: cartContent,
           }),
         }
       );
       const data = await response.json();
       setOrderNumber(data.name);
-      props.clearCart();
+      // context.clearCart();
+      handleClearCart();
     } catch (error) {
       setSubmitError(error.message);
     }
@@ -51,7 +63,7 @@ export default function Cart(props) {
   const cartEntries = (
     <>
       <div className={styles["cart-items"]}>
-        {Object.entries(props.cartContent).map(([key, value]) => (
+        {Object.entries(cartContent).map(([key, value]) => (
           <CartItem key={key} id={key} item={value} />
         ))}
       </div>
@@ -85,32 +97,32 @@ export default function Cart(props) {
     content = successMessage;
   }
 
-  const cartActions = (
-    <div className={styles.actions}>
-      <button
-        className={styles["button--alt"]}
-        onClick={props.clearCart}
-        disabled={cartIsEmpty}
-      >
-        Clear Cart
-      </button>
-      <button className={styles["button--alt"]} onClick={context.hideCart}>
-        Close
-      </button>
-      <button
-        className={styles.button}
-        onClick={handleOrder}
-        disabled={cartIsEmpty}
-      >
-        Order
-      </button>
-    </div>
-  );
-
   return (
     <Modal>
       {content}
-      {isOrdering ? <OrderForm handleSubmit={handleSubmit} /> : cartActions}
+      {isOrdering ? (
+        <OrderForm handleSubmit={handleSubmit} hideCart={props.hideCart} />
+      ) : (
+        <div className={styles.actions}>
+          <button
+            className={styles["button--alt"]}
+            onClick={handleClearCart}
+            disabled={cartIsEmpty}
+          >
+            Clear Cart
+          </button>
+          <button className={styles["button--alt"]} onClick={props.hideCart}>
+            Close
+          </button>
+          <button
+            className={styles.button}
+            onClick={handleOrder}
+            disabled={cartIsEmpty}
+          >
+            Order
+          </button>
+        </div>
+      )}
     </Modal>
   );
 }

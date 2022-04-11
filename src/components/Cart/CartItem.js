@@ -1,16 +1,21 @@
-import React, { useContext } from "react";
-import { CartContext } from "../../context/cart-context";
+// import React, { useContext } from "react";
+// import { CartContext } from "../../context/cart-context";
 import styles from "./CartItem.module.css";
+import { useDispatch } from "react-redux";
+import { cartActions } from "../../store/index";
 
 export default function CartItem(props) {
-  const context = useContext(CartContext);
+  // const context = useContext(CartContext);
+  const dispatch = useDispatch();
 
   function handleIncrease() {
-    context.increaseCartItem(props.id);
+    // context.increaseCartItem(props.id);
+    dispatch(cartActions.increase(props.id));
   }
 
   function handleDecrease() {
-    context.decreaseCartItem(props.id);
+    // context.decreaseCartItem(props.id);
+    dispatch(cartActions.decrease(props.id));
   }
 
   return (

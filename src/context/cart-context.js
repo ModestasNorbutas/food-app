@@ -2,9 +2,12 @@ import { createContext } from "react";
 
 export const CartContext = createContext({
   mealsData: [],
-  showCart: () => {},
-  hideCart: () => {},
+  isLoading: null,
+  mealsError: null,
+  cartContent: {},
+  itemCount: 0,
   addToCart: () => {},
   increaseCartItem: () => {},
   decreaseCartItem: () => {},
+  clearCart: () => {},
 });

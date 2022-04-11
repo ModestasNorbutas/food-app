@@ -1,5 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
-import { CartContext } from "../../context/cart-context";
+import React, { useRef, useState } from "react";
 import styles from "./OrderForm.module.css";
 
 const isValid = (...values) => {
@@ -18,8 +17,6 @@ export default function OrderForm(props) {
     postal: true,
     city: true,
   });
-
-  const context = useContext(CartContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -110,7 +107,7 @@ export default function OrderForm(props) {
         />
       </div>
       <div className={styles.actions}>
-        <button type="button" onClick={context.hideCart}>
+        <button type="button" onClick={props.hideCart}>
           Cancel
         </button>
         <button className={styles.submit}>Confirm</button>

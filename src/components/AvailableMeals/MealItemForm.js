@@ -1,10 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styles from "./MealItemForm.module.css";
 import Input from "../UI/Input";
-import { CartContext } from "../../context/cart-context";
+// import { CartContext } from "../../context/cart-context";
+import { useDispatch } from "react-redux";
+import { cartActions } from "../../store/index";
 
 export default function MealItemForm(props) {
-  const context = useContext(CartContext);
+  // const context = useContext(CartContext);
+  const dispatch = useDispatch();
   const [amount, setAmount] = useState(1);
 
   function changeAmount(event) {
@@ -13,7 +16,8 @@ export default function MealItemForm(props) {
 
   function handleAdd(event) {
     event.preventDefault();
-    context.addToCart(props.item, amount);
+    // context.addToCart(props.item, amount);
+    dispatch(cartActions.addToCart({ item: props.item, amount: amount }));
   }
 
   return (
